@@ -24,7 +24,6 @@ public class CommandScript extends CommandBase {
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         if(args.length == 1){
             if(args[0].equalsIgnoreCase("reload")){
-
                 ForgeScriptRegistry.registerPerms();
             }
         }

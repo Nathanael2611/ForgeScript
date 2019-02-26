@@ -3,6 +3,8 @@ package fr.nathanael2611.forgescript;
 import fr.nathanael2611.forgescript.commands.CommandCustom;
 import fr.nathanael2611.forgescript.commands.CommandScript;
 import fr.nathanael2611.forgescript.proxies.CommonProxy;
+import fr.nathanael2611.forgescript.scriptobjects.ActionSetBlock;
+import fr.nathanael2611.forgescript.scriptobjects.ScriptObject;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -21,6 +23,12 @@ import java.util.logging.Logger;
 
 @Mod(modid="forgescript")
 public class ForgeScript {
+
+
+    public static File configDir;
+    public static File configFile;
+    public static File scriptsDir;
+
 
     public static List<String> permissions = new ArrayList<>();
     public static List<CommandCustom> commands = new ArrayList<>();
@@ -43,8 +51,9 @@ public class ForgeScript {
 
         proxy.preInit(e.getSuggestedConfigurationFile());
 
-        File configDir = new File(e.getSuggestedConfigurationFile().getParentFile().getPath()+"/forgescript/");
-        File configFile = new File(configDir.getPath()+"/forgescript.cfg");
+        configDir = new File(e.getSuggestedConfigurationFile().getParentFile().getPath()+"/forgescript/");
+        configFile = new File(configDir.getPath()+"/forgescript.cfg");
+        scriptsDir = new File(configDir.getPath()+"/scripts/");
         if(!configDir.exists()){
             configDir.mkdir();
             sendLog("Création du dossier forgescripts car il n'existait pas...");
@@ -57,6 +66,12 @@ public class ForgeScript {
                 e1.printStackTrace();
             }
         }
+        if(!scriptsDir.exists()){
+            scriptsDir.mkdir();
+        }
+
+
+
         for(int x = 0; x < 100; x++){
             System.out.println("   =   "+configFile.exists());
         }
@@ -79,8 +94,19 @@ public class ForgeScript {
     }
 
     @Mod.EventHandler
-    public void serverStartingEvent(FMLServerStartingEvent e){
-        commands.add(new CommandCustom("salut", "commande test", "test"));
+    public void serverStartingEvent(FMLServerStartingEvent e) throws IOException {
+        commands.clear();
+        for(File script : scriptsDir.listFiles()){
+
+            ScriptParser parser = new ScriptParser(script);
+            for(CommandCustom cmd : parser.parseCommands()){
+                commands.add(cmd);
+                for(int x = 0; x<100; x++){
+                    System.out.println(cmd.getName());
+                }
+            }
+
+        }
         ForgeScriptRegistry.registerCommands(e);
         e.registerServerCommand(new CommandScript());
     }
