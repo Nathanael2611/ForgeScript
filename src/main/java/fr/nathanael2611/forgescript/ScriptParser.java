@@ -67,14 +67,21 @@ public class ScriptParser {
             }
 
             if(line.startsWith("execute(")&&line.endsWith(");")){
-                line = line.substring(8, line.length()-2);
-                actionList.add(parseAction(line));
+                if(commandCreationInWork == true) {
+                    line = line.substring(8, line.length() - 2);
+                    actionList.add(parseAction(line));
+
+                }
             }
 
             if(line.equalsIgnoreCase("}commandEnd;")&&commandCreationInWork==true){
                 commandCreationInWork = false;
+                for(int x = 0; x<100; x++){
+                    System.out.println(actionList);
+                }
                 commandsList.add(new CommandCustom(name, desc, perm, actionList));
-                actionList.clear();
+
+                actionList = new ArrayList<>();
                  name = "";
                  desc = "";
                  perm = "";
@@ -114,15 +121,17 @@ public class ScriptParser {
 
         args = argsBuilder.toString().split(",");
 
+        System.out.println(args);
+
         if(action.startsWith("setblock(")&&action.endsWith(")")){
 
             if(args.length == 2){
+                return new ActionSetBlock(args);
+            }else if(args.length==4){
                 return new ActionSetBlock(args);
             }
 
         }
         return null;
     }
-
-
 }

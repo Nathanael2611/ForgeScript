@@ -12,8 +12,17 @@ public class ScriptGetters {
         if(varDivideByPoints.length>=1 && varDivideByPoints[0].equalsIgnoreCase("sender")||varDivideByPoints[0].equalsIgnoreCase("player")){
             if(action.entity != null) {
                 if (varDivideByPoints[1] != null && varDivideByPoints[1].equalsIgnoreCase("position")) {
-                    System.out.println(varToGet + "   "+varDivideByPoints[0]);
                     return action.entity.getPosition();
+                }else if(varDivideByPoints.length==3){
+
+                    if(varDivideByPoints[2].equalsIgnoreCase("x")){
+                        return action.entity.getPosition().getX();
+                    }else if(varDivideByPoints[2].equalsIgnoreCase("y")){
+                        return action.entity.getPosition().getY();
+                    }else if(varDivideByPoints[2].equalsIgnoreCase("z")){
+                        return action.entity.getPosition().getZ();
+                    }
+
                 }else{
                     return action.entity;
                 }

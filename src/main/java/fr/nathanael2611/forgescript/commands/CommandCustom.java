@@ -11,6 +11,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandCustom extends CommandBase {
@@ -19,14 +20,20 @@ public class CommandCustom extends CommandBase {
     String usage;
     String permission;
 
-    List<ScriptObject> actionList;
+    List<ScriptObject> actionList = new ArrayList<>();
 
     public CommandCustom(String name, String usage, String permission, List<ScriptObject> actionList){
         this.name = name;
         this.usage = usage;
         this.permission = permission;
-        this.actionList = actionList;
+        for(ScriptObject obj : actionList){
+            this.actionList.add(obj);
+        }
         ForgeScript.permissions.add(permission);
+    }
+
+    public List<ScriptObject> getActionList() {
+        return actionList;
     }
 
     @Override

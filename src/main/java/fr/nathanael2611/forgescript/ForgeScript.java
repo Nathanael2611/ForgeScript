@@ -101,9 +101,7 @@ public class ForgeScript {
             ScriptParser parser = new ScriptParser(script);
             for(CommandCustom cmd : parser.parseCommands()){
                 commands.add(cmd);
-                for(int x = 0; x<100; x++){
-                    System.out.println(cmd.getName());
-                }
+
             }
 
         }
