@@ -1,6 +1,7 @@
 package fr.nathanael2611.forgescript.commands;
 
 import fr.nathanael2611.forgescript.ForgeScript;
+import fr.nathanael2611.forgescript.ForgeScriptRegistry;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -21,7 +22,12 @@ public class CommandScript extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-        System.out.println("salut");
+        if(args.length == 1){
+            if(args[0].equalsIgnoreCase("reload")){
+
+                ForgeScriptRegistry.registerPerms();
+            }
+        }
     }
 
     @Override
@@ -29,7 +35,6 @@ public class CommandScript extends CommandBase {
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
 
         if (sender instanceof EntityPlayer)
-
             return PermissionAPI.hasPermission((EntityPlayer) sender, ForgeScript.MODID+".command.script");
 
         return true;

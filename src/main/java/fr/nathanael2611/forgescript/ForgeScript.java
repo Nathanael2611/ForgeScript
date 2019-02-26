@@ -1,5 +1,6 @@
 package fr.nathanael2611.forgescript;
 
+import fr.nathanael2611.forgescript.commands.CommandCustom;
 import fr.nathanael2611.forgescript.commands.CommandScript;
 import fr.nathanael2611.forgescript.proxies.CommonProxy;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -14,10 +15,15 @@ import net.minecraftforge.server.permission.PermissionAPI;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Mod(modid="forgescript")
 public class ForgeScript {
+
+    public static List<String> permissions = new ArrayList<>();
+    public static List<CommandCustom> commands = new ArrayList<>();
 
     public static final String MODID = "forgescript";
 
@@ -62,6 +68,9 @@ public class ForgeScript {
     public void init(FMLInitializationEvent e){
         proxy.init();
         PermissionAPI.registerNode(MODID+".command.script", DefaultPermissionLevel.OP, "Allow usage of script command.");
+        ForgeScriptRegistry.registerPerms();
+
+
     }
 
 
@@ -71,6 +80,8 @@ public class ForgeScript {
 
     @Mod.EventHandler
     public void serverStartingEvent(FMLServerStartingEvent e){
+        commands.add(new CommandCustom("salut", "commande test", "test"));
+        ForgeScriptRegistry.registerCommands(e);
         e.registerServerCommand(new CommandScript());
     }
 
